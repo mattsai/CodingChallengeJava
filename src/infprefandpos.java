@@ -1,6 +1,6 @@
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import java.awt.List;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class infprefandpos {
 
@@ -15,32 +15,31 @@ public class infprefandpos {
     }
 
 
-    public static String converter(String expression){
-        String output = "";
-        for(char character : expression.toCharArray()){
-            String chrStr = String.valueOf(character);
+    public static ArrayList<String> converter(ArrayList<String> expression){
+        ArrayList<String> output =  new ArrayList<>();
+        for(String chrStr : expression){
             if(!precedence.containsKey(chrStr)){
-                output+=chrStr;
+                output.add(chrStr);
             }else{
                 if(!stackPrecedence.empty() && precedence.get(stackPrecedence.peek()) >= precedence.get(chrStr)){
-                    output+=stackPrecedence.pop();
+                    output.add(stackPrecedence.pop());
                 }
                 stackPrecedence.add(chrStr);
             }
         }
 
         while(!stackPrecedence.isEmpty()){
-            output+=stackPrecedence.pop();
+            output.add(stackPrecedence.pop());
         }
 
         return output;
     }
 
-    public static String converterPostPref(String expression, String choice ){
+    public static String converterPostPref(ArrayList<String> expression, String choice ){
         String output ="";
         Stack<String> tracker = new Stack<>();
-        for (char character : expression.toCharArray()) {
-            String chrStr = String.valueOf(character);
+        for (String chrStr : expression) {
+//            String chrStr = String.valueOf(character);
             if (!precedence.containsKey(chrStr)) {
                 tracker.add(chrStr);
 
@@ -50,30 +49,46 @@ public class infprefandpos {
                 String second  =tracker.pop();
                 String left  = choice == "Pre" ?  first : second;
                 String right  = choice == "Pre" ?  second : first;
-                output = left + chrStr + right;
+                output = '(' +left + chrStr + right + ')';
                 tracker.add(output);
             }
         }
 
         return tracker.pop();
     }
+
+    public static String toString(ArrayList<String> expression){
+        StringBuilder output = new StringBuilder();
+        for(String val : expression){
+            output.append(val).append(" ");
+        }
+        return output.toString();
+
+    }
+
     public static void main(String[] args) {
         loadMap(precedence);
 
-        String expression = "7-5*4/2";
+        String expression = "7 - 5 * 4 / 2";
+//        expression = "+ * -100 20 / 4 2";
 
-        StringBuilder expressionReversed = new StringBuilder();
-        for (int i = expression.length() - 1; i >= 0; i--) {
-            expressionReversed.append(String.valueOf(expression.charAt(i)));
+        ArrayList<String>  expressionArray = new ArrayList<>(Arrays.asList(expression.split(" "))) ;
+
+        ArrayList<String> expressionReversed  = new ArrayList<>();
+
+        for (int left = 0 , i = expressionArray.size() - 1; i >= 0; i--,left++) {
+            expressionReversed.add(expressionArray.get(left));
         }
 
-        String post = converter(expression);
-        String pref = converter(expressionReversed.toString());
+        ArrayList<String> post = converter(expressionArray);
+        ArrayList<String> pref = converter(expressionReversed);
+
 
         System.out.println("Expression : " + expression);
         System.out.println("Infija to");
-        System.out.println("Posfija: " + post);
-        System.out.println("Prefija: " + pref);
+
+        System.out.println("Posfija: " + toString(post));
+        System.out.println("Prefija: " + toString(pref));
 
 
         String pref2 = converterPostPref(pref,"Pre");
