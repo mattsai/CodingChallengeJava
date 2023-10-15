@@ -76,8 +76,8 @@ public class infprefandpos {
 
         ArrayList<String> expressionReversed  = new ArrayList<>();
 
-        for (int left = 0 , i = expressionArray.size() - 1; i >= 0; i--,left++) {
-            expressionReversed.add(expressionArray.get(left));
+        for (int i = expressionArray.size() - 1; i >= 0; i--) {
+            expressionReversed.add(expressionArray.get(i));
         }
 
         ArrayList<String> post = converter(expressionArray);
