@@ -23,10 +23,10 @@ public class zerotothousand {
         }
     }
     public static void main(String[] args) {
-        for (int i = 1; i <= 1000;  i ++){
-            String result = NumberToString(i);
-            System.out.println(result);
-        }
-
+//        for (int i = 1; i <= 1000;  i ++){
+//            String result = NumberToString(i);
+//            System.out.println(result);
+//        }
+        System.out.println(NumberToString(1997));
     }
 }
